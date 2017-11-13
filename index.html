@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Simon Game</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<script>
+var greenSound = new Audio();
+greenSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3';
+
+var redSound = new Audio();
+redSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound2.mp3';
+
+var blueSound = new Audio();
+blueSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound3.mp3';
+
+var yellowSound = new Audio();
+yellowSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3';
+</script>
+
+</head>
+<body>
+<button id="green" data-color="green" onclick="greenSound.play()"></button>
+<button id="red" data-color="red" onclick="redSound.play()"></button>
+<button id="blue" data-color="blue" onclick="blueSound.play()"></button>
+<button id="yellow" data-color="yellow" onclick="yellowSound.play()"></button>
+<button id="start">START</button>
+<button id="reset">RESET</button>
+<button id="strict">STRICT MODE</button>
+
+<p>count:</p>
+<p id="display"> - - </p>
+
+<script src="script.js"></script>
+</body>
+
+</html>
+

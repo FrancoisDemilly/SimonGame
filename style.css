@@ -1,0 +1,29 @@
+/*style*/
+button{
+height: 40px;
+width : 120px;
+}
+
+#green{
+background-color: green;
+}
+
+#red{
+background-color: red;
+}
+
+#blue{
+background-color: blue;
+}
+
+#yellow{
+background-color: yellow;
+}
+
+#green:active, #red:active,
+#blue:active, #yellow:active{
+  /*background-color: yellow*/
+opacity: 0.5;
+}
+
+
