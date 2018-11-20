@@ -1,6 +1,3 @@
-//WEB ID #: 0600089471234  http://www.thebay.com/webapp/wcs/stores/servlet/en/thebay/mens/zipped-hooded-duffle-coat-0600089471234--24
-
-//prevent the player to click on more color than there is in the sequenceComp
 
 //js files
 window.onload = function(){
@@ -11,25 +8,42 @@ var sequenceComp = [];
 var sequencePlayer = [];
 var display = document.getElementById('display');
 var strictMode = false;
+var toggleSwitch = 'off';
+
 
 
 //////////////////////////////
 
-//function todisplay the length of the computer sequence
+//function to display the length of the computer sequence
 function displayLength(){
   display.innerHTML = sequenceComp.length;
 }
 
+var toggle = document.querySelector('.toggle');
+toggle.addEventListener('click', function(){
+  if(toggleSwitch === 'off'){
+    toggleSwitch = 'on';
+    console.log("toggleSwitch = 'on'")
+  }else{
+    toggleSwitch = 'off';
+    console.log("toggleSwitch = 'off'")
+  }
+  disableColorButton();
+});
+
 //reset the game
 var reset = document.querySelector('#reset');
 reset.addEventListener('click', function(){
-  display.innerHTML = " - - ";
-  sequenceComp = [];
-  computerPick();
-  highlightSequenceComp();
-  console.log('reset has been pressed');
-  //display the length of the sequence to reperform
-  displayLength();
+  //checking if the game is on
+  if(toggleSwitch === 'on'){
+    display.innerHTML = " - - ";
+    sequenceComp = [];
+    computerPick();
+    highlightSequenceComp();
+    console.log('reset has been pressed');
+    //display the length of the sequence to reperform
+    displayLength();
+  }
 });
 
 //enable strict mode
@@ -37,7 +51,11 @@ reset.addEventListener('click', function(){
 var strict = document.querySelector('#strict');
 strict.addEventListener('click', function(){
   // make a little red dot appear ==> to do
-  strictMode = true;
+  if (strictMode === false){
+    strictMode = true;
+  } else {
+    strictMode = false;
+  }
   console.log("from addvent strictMode", strictMode);
 });
 
@@ -45,19 +63,26 @@ strict.addEventListener('click', function(){
 
 var start = document.querySelector('#start');
 start.addEventListener('click', function(){
-  computerPick();
-  highlightSequenceComp();
   console.log('start');
-  //display the length of the sequence to reperform
-  displayLength();
+  //checking if the game is on
+  if(toggleSwitch === 'on'){
+    computerPick();
+    highlightSequenceComp();
+
+    //display the length of the sequence to reperform
+    displayLength();
+  }
 });
 
 
 //computer randomly pick a color
 function computerPick(){
-var picked = color[Math.floor(Math.random() * color.length)];
-sequenceComp.push(picked);
-console.log("sequenceComp", sequenceComp);
+  //since the computer is very fast to pick up color
+  //we consider the risk of the player clicking on color button during this time
+  //is null, consequently we do not deactivate button ad it creates error with strict mode
+  var picked = color[Math.floor(Math.random() * color.length)];
+  sequenceComp.push(picked);
+  console.log("sequenceComp", sequenceComp);
 }
 
 
@@ -73,6 +98,20 @@ console.log("sequenceComp", sequenceComp);
  blue.addEventListener('click', addToSequencePlayerThenCompare);
  yellow.addEventListener('click', addToSequencePlayerThenCompare);
 
+ function disableColorButton(){
+    green.disabled = true;
+    red.disabled = true;
+    blue.disabled = true;
+    yellow.disabled = true;
+ }
+
+ function enableColorButton(){
+    green.disabled = false;
+    red.disabled = false;
+    blue.disabled = false;
+    yellow.disabled = false;
+ }
+
 
 function addToSequencePlayerThenCompare (){
   sequencePlayer.push(this.dataset.color);
@@ -82,40 +121,38 @@ function addToSequencePlayerThenCompare (){
 
 //reworking the compare function
 function compare(){
+  console.log("from compare disableColorButton()")
+  disableColorButton();
 if (sequenceComp.length > sequencePlayer.length){
   if(sequencePlayer.every(function(element, index){
         return element === sequenceComp[index];
     })){
-    console.log("seqC > SeqP and all true")
+    //the player is imputing the color in the right order
     //true do nothing let it check until false or lenght are equal
-    console.log("sequencePlayer", sequencePlayer)
-    console.log("sequenceComp", sequenceComp)
-    //console.log("true")
     //return true
+    enableColorButton();
   }else{
-    console.log("seqC > SeqP and 1 false")
+    //console.log("seqC > SeqP and 1 false")
     //if false
       if(strictMode === false){
           // reset sequencePlayer to empty as plater picked the wrong color
           sequencePlayer = [];
           //send an error bip and replay the sequence
-          highlightSequenceComp();
-          console.log("sequencePlayer", sequencePlayer)
-          console.log("sequenceComp", sequenceComp)
-          //console.log("false")
-          //return false
+          setTimeout(function delayedResponse(){
+            highlightSequenceComp();
+          }, 2000);
       }else if(strictMode === true){
-          console.log("strictMode", strictMode);
+          //console.log("strictMode", strictMode);
           var tempLength = sequenceComp.length;
           sequenceComp = [];
           sequencePlayer =[];
-          console.log(tempLength);
           for (var j=0; j<tempLength; j++){
             computerPick();
           }
           displayLength();
-          highlightSequenceComp();
-
+          setTimeout(function delayedResponse(){
+            highlightSequenceComp();
+            }, 2000);
         }
 
   }
@@ -123,7 +160,7 @@ if (sequenceComp.length > sequencePlayer.length){
   if(sequencePlayer.every(function(element, index){
         return element === sequenceComp[index];
     })){
-    console.log("seqC === SeqP and all true")
+    //console.log("seqC === SeqP and all true")
     //if true
     computerPick()
     //display the length of the sequence to reperform
@@ -133,7 +170,7 @@ if (sequenceComp.length > sequencePlayer.length){
     //reset sequencePlayer to [] so he can play angain
     sequencePlayer = [];
   }else{
-    console.log("seqC === SeqP and 1 false")
+    //console.log("seqC === SeqP and 1 false")
     //if false
       if(strictMode === false){
         //display the length of the sequence to reperform
@@ -141,25 +178,21 @@ if (sequenceComp.length > sequencePlayer.length){
         // reset sequencePlayer to empty as plater picked the wrong color
         sequencePlayer = [];
         //send an error bip and replay the sequence
-        highlightSequenceComp();
-        console.log("sequencePlayer", sequencePlayer);
-        console.log("sequenceComp", sequenceComp);
-        console.log("false");
-        console.log("strictMode", strictMode);
-        //return false
+        setTimeout(function delayedResponse(){
+          highlightSequenceComp();
+        }, 2000);
       }
       else if(strictMode === true){
-        console.log("strictMode", strictMode);
         var tempLength = sequenceComp.length;
         sequenceComp = [];
         sequencePlayer =[];
-        console.log(tempLength);
         for (var j=0; j<tempLength; j++){
           computerPick();
         }
         displayLength();
-        highlightSequenceComp();
-
+        setTimeout(function delayedResponse(){
+          highlightSequenceComp();
+          }, 2000);
       }
     }
   }
@@ -167,23 +200,24 @@ if (sequenceComp.length > sequencePlayer.length){
 
 
 function highlightSequenceComp(){
+  disableColorButton()
   for(var i = 0; i<sequenceComp.length ; i++){
       (function(){
           var j = i;
           var dom = document.getElementById(sequenceComp[j])
           setTimeout(function delaySetAtt (){
-            dom.setAttribute("style", /*"opacity: 0.5"*/"background: black");
+            dom.setAttribute("style", "opacity: 0.5" /*"background: black"*/);
             choseSound(dom);
-            console.log("from timeout set / var J", j , "dom", dom);
-            console.log(dom.dataset.color, dom.dataset.color === "yellow" )
           },(j+1)*1500);
           setTimeout(function delayRemov (){
             dom.removeAttribute("style");
-            console.log("from timeout remove / var J", j , "dom", dom);
-          }, (j+1)*1750);
+            if(j+1 === sequenceComp.length){
+              enableColorButton();
+            }
+          }, (j+1)*1650);
       })();
   }//end of for
-  }//end of highlight
+}//end of highlight
 
 //sound effect
 function choseSound(elt){
@@ -208,6 +242,7 @@ function choseSound(elt){
   yellowSound.play();
   }
 }
+
 
 
 

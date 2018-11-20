@@ -22,16 +22,40 @@ yellowSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound4.mp3';
 
 </head>
 <body>
+<div class="main">
+
+<div class="over">
 <button id="green" data-color="green" onclick="greenSound.play()"></button>
 <button id="red" data-color="red" onclick="redSound.play()"></button>
+</div>
+<div class="under">
 <button id="blue" data-color="blue" onclick="blueSound.play()"></button>
 <button id="yellow" data-color="yellow" onclick="yellowSound.play()"></button>
-<button id="start">START</button>
-<button id="reset">RESET</button>
-<button id="strict">STRICT MODE</button>
+</div>
 
-<p>count:</p>
-<p id="display"> - - </p>
+<div class="inner">
+<div class="command">
+
+  <div class="title">
+    <h1>SIMON</h1>
+  </div>
+  <div class='wrapper'>
+    <div class="buttonBlock ">
+      <button id="start" class="commandButton">START</button>
+      <button id="reset" class="commandButton">RESET</button>
+      <button id="strict" class="commandButton">STRICT</button>
+    </div>
+      <div class='fiSw'>
+          <div class=display><p id="display"> - - </p></div>
+          <input class="toggle" type="checkbox" >
+      </div>
+  </div> <!-- end wrapper  -->
+</div> <!-- end of command -->
+</div><!-- end of inner -->
+
+</div><!-- end of main -->
+
+
 
 <script src="script.js"></script>
 </body>
