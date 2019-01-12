@@ -1,6 +1,6 @@
 
 //js files
-window.onload = function(){
+var init = function(){
 
 var green, red, blue, yellow;
 var color = ['green', 'red', 'blue', 'yellow'];
@@ -8,7 +8,7 @@ var sequenceComp = [];
 var sequencePlayer = [];
 var display = document.getElementById('display');
 var strictMode = false;
-var toggleSwitch = 'off';
+let toggleSwitch = 'off';
 
 
 
@@ -19,14 +19,17 @@ function displayLength(){
   display.innerHTML = sequenceComp.length;
 }
 
-var toggle = document.querySelector('.toggle');
+var toggle = document.getElementById('myswitch');
+
 toggle.addEventListener('click', function(){
   if(toggleSwitch === 'off'){
     toggleSwitch = 'on';
-    console.log("toggleSwitch = 'on'")
+    display.innerHTML = "- -";
   }else{
     toggleSwitch = 'off';
-    console.log("toggleSwitch = 'off'")
+    display.innerHTML = "";
+    disableColorButton()
+    sequenceComp = [];
   }
   disableColorButton();
 });
@@ -121,9 +124,9 @@ function addToSequencePlayerThenCompare (){
 
 //reworking the compare function
 function compare(){
-  console.log("from compare disableColorButton()")
+  //console.log("from compare disableColorButton()")
   disableColorButton();
-if (sequenceComp.length > sequencePlayer.length){
+if(sequenceComp.length > sequencePlayer.length){
   if(sequencePlayer.every(function(element, index){
         return element === sequenceComp[index];
     })){
@@ -146,7 +149,7 @@ if (sequenceComp.length > sequencePlayer.length){
           var tempLength = sequenceComp.length;
           sequenceComp = [];
           sequencePlayer =[];
-          for (var j=0; j<tempLength; j++){
+          for(var j=0; j<tempLength; j++){
             computerPick();
           }
           displayLength();
@@ -205,6 +208,7 @@ function highlightSequenceComp(){
       (function(){
           var j = i;
           var dom = document.getElementById(sequenceComp[j])
+          console.log('sequenceComp[j]', dom);
           setTimeout(function delaySetAtt (){
             dom.setAttribute("style", "opacity: 0.5" /*"background: black"*/);
             choseSound(dom);
@@ -221,6 +225,7 @@ function highlightSequenceComp(){
 
 //sound effect
 function choseSound(elt){
+  //console.log('from chose sound');
   if(elt.dataset.color === 'green' || elt === 'a'){
     var greenSound = new Audio();
     greenSound.src = 'https://s3.amazonaws.com/freecodecamp/simonSound1.mp3'
@@ -244,7 +249,6 @@ function choseSound(elt){
 }
 
 
-
-
-
 }//end of window.onload
+
+window.addEventListener('DOMContentLoaded', init, false);
